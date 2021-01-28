@@ -14,7 +14,9 @@ public class Move : MonoBehaviour
     public bool jumping = false;
     // Left/right move speed.
     private float s_moveSpeed = 100f;
-    
+
+    public bool walling = false;
+
     private void Awake()
     {
 
@@ -35,15 +37,17 @@ public class Move : MonoBehaviour
         {
             jumping = true;
         }
-        //else if (Input.GetButtonUp("Jump"))
-        //{
 
-        //}
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        {
+            walling = true;
+        }
     }
 
     private void FixedUpdate()
     {
-        controller.MoveSprite(m_xMovement * Time.fixedDeltaTime, jumping);
+        controller.MoveSprite(m_xMovement * Time.fixedDeltaTime, jumping, walling);
         jumping = false;
+        walling = false;
     }
 }
