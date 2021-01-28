@@ -38,10 +38,10 @@ public class Move : MonoBehaviour
             jumping = true;
         }
 
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
-        {
-            walling = true;
-        }
+        //if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+        //{
+        //    walling = true;
+        //}
     }
 
     private void FixedUpdate()

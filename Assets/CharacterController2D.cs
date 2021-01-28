@@ -83,7 +83,7 @@ public class CharacterController2D : MonoBehaviour
             if (wallColliders[i].gameObject != gameObject)
             {
                 m_onWall = true;
-
+                m_midAirControl = false;
                 if (!wasOnWall)
                     OnWall.Invoke();
             }
@@ -104,32 +104,55 @@ public class CharacterController2D : MonoBehaviour
             
         }
 
-        if (m_onWall && isWalling)
+        //if (m_onWall && isWalling)
+        //{
+        //    //Vector3 desiredVelocity = new Vector2(move * 10f, s_spriteRB.velocity.y);
+        //    //s_spriteRB.velocity = Vector3.SmoothDamp(s_spriteRB.velocity, desiredVelocity, ref m_velocity, m_worldFriction);
+
+        //    //float wallTimer = 3.0f;
+        //    //wallTimer -= Time.deltaTime;
+
+        //    //if (wallTimer == 0)
+        //    //{
+        //    //    s_spriteRB.velocity = new Vector2(0, -1);
+        //    //}
+
+        //    m_onWall = false;
+
+        //    if (isJumping)
+        //    {
+        //        s_spriteRB.AddForce(new Vector2(s_spriteRB.velocity.x, s_jumpForce));
+        //    }
+            
+        //}
+
+        if ((m_isGrounded || m_onWall) && isJumping)
         {
-            Vector3 desiredVelocity = new Vector2(move * 10f, s_spriteRB.velocity.y);
-            s_spriteRB.velocity = Vector3.SmoothDamp(s_spriteRB.velocity, desiredVelocity, ref m_velocity, m_worldFriction);
-
-            //float wallTimer = 3.0f;
-            //wallTimer -= Time.deltaTime;
-
-            //if (wallTimer == 0)
-            //{
-            //    s_spriteRB.velocity = new Vector2(0, -1);
-            //}
-
+            m_isGrounded = false;
             m_onWall = false;
+            s_spriteRB.AddForce(new Vector2(0f, s_jumpForce));
+        }
+
+        if (isWalling)
+        {
+            int jumpCounter = 0;
 
             if (isJumping)
             {
-                s_spriteRB.AddForce(new Vector2(s_spriteRB.velocity.x, s_jumpForce));
-            }
-            
-        }
+                jumpCounter += 1;
 
-        if (m_isGrounded && isJumping)
-        {
-            m_isGrounded = false;
-            s_spriteRB.AddForce(new Vector2(0f, s_jumpForce));
+                if (jumpCounter >= 1)
+                {
+                    isJumping = false;
+                }
+            }
+            else
+            {
+                jumpCounter = 0;
+            }
+            m_onWall = false;
+            //s_spriteRB.AddForce(new Vector2(s_spriteRB.velocity.x, s_jumpForce));
+            s_spriteRB.AddForce(new Vector2(move * 10f, s_jumpForce));
         }
     }
 }
