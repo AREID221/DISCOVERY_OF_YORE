@@ -10,40 +10,40 @@ public class Move : MonoBehaviour
 
     // Left/right movement, jumping velocity.
     private float m_xMovement = 0f;
-    private float m_yMovement = 0f;
-
+   //private float m_yMovement = 0f;
+    public bool jumping = false;
     // Left/right move speed.
     private float s_moveSpeed = 100f;
-
-    // Jump force.
-    private float s_jumpForce = 30f;
-
-    // Isn't used.
-    //public Rigidbody2D rB;
-    //public float force = 10f;
     
     private void Awake()
     {
-        //rB = GetComponent<Rigidbody2D>();
+
     }
 
     // Start is called before the first frame update
     private void Start()
     {
-        // Take this out and add colliders to player (one for collision and one for ground check).
-        //rB.isKinematic = true;
+
     }
 
     // Update is called once per frame
     private void Update()
     {
         m_xMovement = Input.GetAxisRaw("Horizontal") * s_moveSpeed;
-        //m_yMovement = Input.GetAxisRaw("Vertical"); // Jumping instead.
+
+        if (Input.GetButton("Jump"))
+        {
+            jumping = true;
+        }
+        //else if (Input.GetButtonUp("Jump"))
+        //{
+
+        //}
     }
 
     private void FixedUpdate()
     {
-        //                    Left/right,  jump.
-        controller.MoveSprite(m_xMovement * Time.fixedDeltaTime, false);
+        controller.MoveSprite(m_xMovement * Time.fixedDeltaTime, jumping);
+        jumping = false;
     }
 }
