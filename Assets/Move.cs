@@ -10,12 +10,14 @@ public class Move : MonoBehaviour
 
     // Left/right movement, jumping velocity.
     private float m_xMovement = 0f;
-   //private float m_yMovement = 0f;
+    //private float m_yMovement = 0f;
+    public bool grounded = false;
     public bool jumping = false;
     // Left/right move speed.
     private float s_moveSpeed = 100f;
 
     public bool walling = false;
+    public bool wallJumping = false;
 
     private void Awake()
     {
@@ -33,21 +35,37 @@ public class Move : MonoBehaviour
     {
         m_xMovement = Input.GetAxisRaw("Horizontal") * s_moveSpeed;
 
-        if (Input.GetButton("Jump"))
+        if (controller.m_isGrounded)
+        {
+            grounded = true;
+            controller.m_midAirControl = true;
+        }
+
+        if (controller.m_onWall)
+        {
+            walling = true;
+        }
+
+        if (Input.GetButton("Jump") && !controller.m_onWall)
         {
             jumping = true;
         }
+        else if (Input.GetButton("Jump") && controller.m_onWall)
+        {
+            wallJumping = true;
+        }
+        
 
-        //if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
-        //{
-        //    walling = true;
-        //}
+
+
     }
 
     private void FixedUpdate()
     {
-        controller.MoveSprite(m_xMovement * Time.fixedDeltaTime, jumping, walling);
+        controller.MoveSprite(m_xMovement * Time.fixedDeltaTime, grounded, jumping, walling, wallJumping);
         jumping = false;
+        wallJumping = false;
         walling = false;
+        grounded = false;
     }
 }
