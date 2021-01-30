@@ -130,8 +130,10 @@ public class CharacterController2D : MonoBehaviour
 
         if (isWalling)
         {
+            float spriteVelocity = s_spriteRB.velocity.x;
             m_midAirControl = true;
             s_spriteRB.AddForce(new Vector2(0f, s_spriteRB.velocity.y - 100));
+            spriteVelocity = 0;
         }
 
 
